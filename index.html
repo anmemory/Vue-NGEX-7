@@ -9,6 +9,8 @@
     .character-img {
       max-width: 500px;
       border-radius: 10px;
+      margin: 20px auto;
+      display: block;
     }
     
     @font-face {
@@ -18,66 +20,157 @@
       font-style: normal;
     }
 
-    /* Use more styles as needed */
-  
+    h1 {
+      font-family: 'Luna';
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .trait-column {
+      margin-bottom: 15px;
+    }
+
+    .form-check-label {
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #3498db;
+      border-color: #3498db;
+      padding: 10px 25px;
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .btn-primary:hover {
+      background-color: #2980b9;
+      border-color: #2980b9;
+    }
+
+    .result-container {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .result-title {
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body class="p-4">
-
-  <!-- Complete this part -->
+  <div id="app">
+    <h1>Which Ghibli Character Are You?</h1>
+    
+    <div class="container">
+      <h3 class="text-center mb-4">Select your traits:</h3>
+      
+      <div class="row justify-content-center">
+        <!-- First Column -->
+        <div class="col-md-2 trait-column">
+          <div class="form-check" v-for="trait in availableTraits.slice(0, 6)" :key="trait">
+            <input class="form-check-input" type="checkbox" :id="trait" :value="trait" v-model="selectedTraits">
+            <label class="form-check-label" :for="trait">
+              {{ trait }}
+            </label>
+          </div>
+        </div>
+        
+        <!-- Second Column -->
+        <div class="col-md-2 trait-column">
+          <div class="form-check" v-for="trait in availableTraits.slice(6, 11)" :key="trait">
+            <input class="form-check-input" type="checkbox" :id="trait" :value="trait" v-model="selectedTraits">
+            <label class="form-check-label" :for="trait">
+              {{ trait }}
+            </label>
+          </div>
+        </div>
+        
+        <!-- Third Column -->
+        <div class="col-md-2 trait-column">
+          <div class="form-check" v-for="trait in availableTraits.slice(11)" :key="trait">
+            <input class="form-check-input" type="checkbox" :id="trait" :value="trait" v-model="selectedTraits">
+            <label class="form-check-label" :for="trait">
+              {{ trait }}
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center">
+        <button class="btn btn-primary" @click="findCharacter">Reveal My Character</button>
+      </div>
+      
+      <div v-if="result" class="result-container">
+        <h2 class="result-title">You are most like {{ result.name }}</h2>
+        <img :src="result.image" :alt="result.name" class="character-img">
+        <p class="mt-3 lead">{{ result.description }}</p>
+      </div>
+      
+      <div v-else-if="noResult" class="alert alert-warning mt-4 text-center">
+        Hmm...Either you didn't select any traits or we couldn't find a match. Please try again
+      </div>
+    </div>
+  </div>
 
 <script>
 Vue.createApp({
   data() {
     return {
-      /* complete this part */
+      availableTraits: [
+        'Ambitious', 'Kind', 'Protective', 'Independent', 'Empathetic', 'Mysterious',
+        'Brave', 'Quiet', 'Mischievous', 'Dreamy', 'Hardworking',
+        'Curious', 'Adventurous', 'Loyal', 'Funny', 'Witty'
+      ],
+      selectedTraits: [],
       characters: [
         {
           name: 'Totoro',
           traits: ['Kind', 'Quiet', 'Protective', 'Empathetic'],
-          image: 'assets/totoro.png',
+          image: 'assets/totoro.png ',
           description: 'Totoro is a gentle forest spirit who watches over children and brings joy and magic.'
         },
         {
           name: 'Kiki',
           traits: ['Brave', 'Adventurous', 'Independent', 'Hardworking'],
-          image: 'assets/kiki.webp',
+          image: 'kiki.webp',
           description: 'Kiki is a young witch-in-training, brave and eager to find her place in the world.'
         },
         {
           name: 'Chihiro',
           traits: ['Curious', 'Brave', 'Kind', 'Empathetic'],
-          image: 'assets/chihiro.png',
+          image: 'chihiro.png',
           description: 'Chihiro overcomes fear and shows great courage and kindness in a magical world.'
         },
         {
           name: 'Calcifer',
           traits: ['Mischievous', 'Protective', 'Witty'],
-          image: 'assets/calcifer.jpeg',
+          image: 'calcifer.jpeg',
           description: 'Calcifer is a fiery, funny spirit with a strong personality and a warm heart... literally!'
         },
         {
           name: 'Howl',
           traits: ['Mysterious', 'Brave', 'Dreamy', 'Witty'],
-          image: 'assets/howl.jpg',
+          image: 'howl.jpg',
           description: 'Howl is a charming and enigmatic wizard who learns to love and protect selflessly.'
         },
         {
           name: 'San',
           traits: ['Brave', 'Loyal', 'Independent', 'Protective'],
-          image: 'assets/san.jpg',
+          image: 'san.jpg',
           description: 'San is a fierce warrior raised by wolves, deeply connected to nature and loyalty.'
         },
         {
           name: 'Ponyo',
           traits: ['Curious', 'Dreamy', 'Mischievous', 'Funny', 'Magical'],
-          image: 'assets/ponyo.jpeg',
+          image: 'ponyo.jpeg',
           description: 'Ponyo is a magical fish-girl with an adventurous heart and love for the surface world.'
         },
         {
           name: 'Arrietty',
           traits: ['Curious', 'Adventurous', 'Brave', 'Ambitious'],
-          image: 'assets/arrietty.webp',
+          image: 'arrietty.webp',
           description: 'Arrietty is a tiny borrower who dreams of exploring the world beyond her home.'
         }
       ],
